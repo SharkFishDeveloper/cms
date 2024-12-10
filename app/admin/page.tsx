@@ -19,7 +19,6 @@ const Admin = () => {
   //* Check if only admin is accessing this route
   useEffect(()=>{
     const adminCheck = async()=>{
-      // setAdmin();
         if(session.data?.user){
             if(session.data?.user.role==="user"){
                router.replace("/");
@@ -28,7 +27,7 @@ const Admin = () => {
         }
     }
     adminCheck()
-  },[router, session.data?.user])  
+  })  
 
   //* Check admin password
   const handleAdminPasswordClick = async ()=>{
@@ -74,7 +73,7 @@ const Admin = () => {
         <div>
           <div onClick={()=>setCreateCourse((p)=>!p)}>{!createCourse ? "Create course" :"Back"}</div>
 
-          {createCourse && session.data?.user.name && session.data?.user.id && (
+          {createCourse && session.data?.user.id && (
             <div>
               <CourseForm instructorId={session.data?.user.id} />
             </div>

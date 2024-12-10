@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -9,18 +10,12 @@ const CourseForm = ({instructorId}:{instructorId:string}) => {
   const [price, setPrice] = useState<number | string>('');
   const [startDate, setStartDate] = useState('');
   const [duration, setDuration] = useState<number | string>('');
-  const [error, setError] = useState<string>('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     if (Number(duration) <= 0 && Number(price) <=0) {
-      setError('Must be greater than 0');
+      toast.error('Must be greater than 0');
       return;
     }
-
-    setError('');
-
     const courseData = {
       courseName,
       thumbnailUrl,
@@ -31,14 +26,14 @@ const CourseForm = ({instructorId}:{instructorId:string}) => {
       instructorId
     };
     const response = await axios.post(`api/create_course`,courseData);
-    if(response.data.status!=="200"){
-      console.log(response.data.error)
-      return toast.error(JSON.stringify(response.data.error));
+    console.log(response.data.status)
+    if(response.data.status!==200){
+      return toast.error(response.data.message);
     }else{
       return toast.success(response.data.message);
     }
   };
-
+console.log("e")
   return (
     <div className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-md">
       <h2 className="text-2xl font-semibold text-center mb-4">Make Course</h2>
@@ -139,12 +134,6 @@ const CourseForm = ({instructorId}:{instructorId:string}) => {
           />
         </div>
 
-        {/* Error message */}
-        {error && (
-          <div className="text-red-500 text-sm mt-2">
-            {error}
-          </div>
-        )}
 
         {/* Submit Button */}
         <div className="flex justify-center mt-6">
