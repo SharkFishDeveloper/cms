@@ -7,6 +7,7 @@ declare module "next-auth" {
     id: string;
     email: string;
     name: string;
+    image:string;
     role: string; // Add the role field here
   }
 
@@ -16,6 +17,7 @@ declare module "next-auth" {
       email: string;
       name: string;
       role: string;
+      image:string;
     };
   }
 

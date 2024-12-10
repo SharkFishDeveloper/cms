@@ -11,26 +11,64 @@ export async function POST(req:NextRequest){
                 role
             }
         })
-        
+
+        if (!user) {
+            return NextResponse.json({
+                message: "Invalid credentials",
+                status: "401",
+                role: null,
+                data: null,
+            });
+        }
+
         let courses;
 
-        if(user?.role==="instructor"){
+        if (role === "admin") {
+            // Admin: Fetch all courses
             courses = await prisma.course.findMany({
-                where:{
-                    instructorId:user?.id
+                select:{
+                    id:true,
+                    instructor:true,
+                    instructorId:true,
+                    thumbnailUrl:true,
+                    courseName:true,
+                    description:true,
+                    price:true
+                    
                 }
-            })
-            return NextResponse.json({message:"Verifed",status:"200",data:courses})
-        }
-        else if(user?.role==="instructor"){
-            courses = await prisma.course.findMany({});
+            });
+        } else if (role === "instructor") {
+            // Instructor: Fetch only their courses
+            courses = await prisma.course.findMany({
+                where: {
+                    instructorId: user.id,
+                },
+                select:{
+                    id:true,
+                    instructor:true,
+                    instructorId:true,
+                    thumbnailUrl:true,
+                    courseName:true,
+                    description:true,  
+                    price:true
+                }
+            });
+        } else {
+            return NextResponse.json({
+                message: "Unauthorized",
+                status: "403",
+                role: null,
+                data: null,
+            });
         }
 
-        if(user){
-            return NextResponse.json({message:"Verifed",status:"200",data:courses})
-        }else{
-            return NextResponse.json({message:"Invalid request",status:"500",error:null})
-        }
+        return NextResponse.json({
+            message: "Verified",
+            status: "200",
+            role: user.role,
+            data: courses,
+        });
+
     } catch (error) {
         return NextResponse.json({message:"Try after some time ",status:"400",error:error})
     }

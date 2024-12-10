@@ -25,6 +25,9 @@ model Course {
   description    String  
   instructorId   String
   instructor     User      @relation("CreatedCourses", fields: [instructorId], references: [id]) 
+  price          Int
+  duration       Int
+  startDate      String
   users          User[]      
   videoLinks     VideoLinksArray[] 
 }
