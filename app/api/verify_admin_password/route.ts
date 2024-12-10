@@ -28,12 +28,18 @@ export async function POST(req:NextRequest){
             courses = await prisma.course.findMany({
                 select:{
                     id:true,
-                    instructor:true,
+                    instructor:{
+                        select:{
+                            name:true
+                        }
+                    },
                     instructorId:true,
                     thumbnailUrl:true,
                     courseName:true,
                     description:true,
-                    price:true
+                    price:true,
+                    duration:true,
+                    startDate:true,
                     
                 }
             });
@@ -45,12 +51,18 @@ export async function POST(req:NextRequest){
                 },
                 select:{
                     id:true,
-                    instructor:true,
+                    instructor:{
+                        select:{
+                            name:true
+                        }
+                    },
                     instructorId:true,
                     thumbnailUrl:true,
                     courseName:true,
                     description:true,  
-                    price:true
+                    price:true,
+                    duration:true,
+                    startDate:true,
                 }
             });
         } else {

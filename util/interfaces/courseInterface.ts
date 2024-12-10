@@ -1,11 +1,15 @@
 interface CourseInterface{
     id: string;
-    instructor: string; 
+    instructor:{
+        name:string
+    }; 
     instructorId: string;
     thumbnailUrl: string;
     courseName: string;
     description: string;
-    price:number
+    price:number,
+    startDate:string,
+    duration:true,
 }
 
 export default CourseInterface;

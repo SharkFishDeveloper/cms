@@ -1,5 +1,6 @@
 "use client"
 
+import { CourseCardAdminPanel } from "@/components/CourseCardAdminPanel";
 import CourseForm from "@/components/CourseForm";
 import CourseInterface from "@/util/interfaces/courseInterface";
 import axios from "axios";
@@ -63,15 +64,27 @@ const Admin = () => {
       )}
 
 
+{/* <p>All courses - {JSON.stringify(courses)}</p> */}
       { admin && (
         <>
-        <div>
-          You are on Admin page
-        </div>
-        <p>All courses - {JSON.stringify(courses)}</p>
+        {admin==="admin" ? (
+          <div>
+            {courses.map((course,index)=>(
+              <div key={index}>
+                <CourseCardAdminPanel course={course}/>
+              </div>
+            ))}
+          </div>
+        ):(
+          <div>
+
+          </div>
+        )}
 
         <div>
-          <div onClick={()=>setCreateCourse((p)=>!p)}>{!createCourse ? "Create course" :"Back"}</div>
+          <div onClick={()=>setCreateCourse((p)=>!p)}>
+            {!createCourse ? "Create course" :"Back"}
+          </div>
 
           {createCourse && session.data?.user.id && (
             <div>
