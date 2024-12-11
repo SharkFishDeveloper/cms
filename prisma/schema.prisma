@@ -14,7 +14,7 @@ model User {
   email           String   @unique
   name            String
   password        String?
-  courses         Course[] 
+  courses         UserCourse[] // Updated to use the join table
   createdCourses  Course[] @relation("CreatedCourses") 
 }
 
@@ -28,8 +28,19 @@ model Course {
   price          Int
   duration       Int
   startDate      String
-  users          User[]      
+  users          UserCourse[] // Updated to use the join table
   videoLinks     VideoLinksArray[] 
+}
+
+model UserCourse {
+  id         String   @id @default(uuid())
+  userId     String
+  courseId   String
+  boughtDate DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+  course     Course   @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId]) // Ensures a user cannot buy the same course multiple times
 }
 
 model VideoLinksArray {
