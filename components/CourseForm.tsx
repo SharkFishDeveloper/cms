@@ -1,39 +1,46 @@
-
 import axios from 'axios';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-const CourseForm = ({instructorId}:{instructorId:string}) => {
+const CourseForm = ({ instructorId }: { instructorId: string }) => {
   const [courseName, setCourseName] = useState('');
-  const [thumbnailUrl, setThumbnailUrl] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState<number | string>('');
   const [startDate, setStartDate] = useState('');
   const [duration, setDuration] = useState<number | string>('');
+  const [durationUnit, setDurationUnit] = useState<'months' | 'weeks'>('months');
 
-  const handleSubmit = async () => {
-    if (Number(duration) <= 0 && Number(price) <=0) {
-      toast.error('Must be greater than 0');
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (Number(duration) <= 0 || Number(price) <= 0) {
+      toast.error('Duration and price must be greater than 0');
       return;
     }
+    const adjustedDuration = durationUnit === 'weeks' ? Number(duration) : Number(duration) * 4; // Assume 1 month = 4 weeks
+    
     const courseData = {
       courseName,
-      thumbnailUrl,
       description,
       price,
       startDate,
-      duration,
-      instructorId
+      duration:adjustedDuration,
+      instructorId,
     };
-    const response = await axios.post(`api/create_course`,courseData);
-    console.log(response.data.status)
-    if(response.data.status!==200){
-      return toast.error(response.data.message);
-    }else{
-      return toast.success(response.data.message);
+
+    try {
+      const response = await axios.post(`api/create_course`, courseData);
+      if (response.data.status !== 200) {
+        toast.error(response.data.message);
+      } else {
+        toast.success(response.data.message);
+      }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast.error('An error occurred while creating the course');
     }
   };
-console.log("e")
+
   return (
     <div className="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-md">
       <h2 className="text-2xl font-semibold text-center mb-4">Make Course</h2>
@@ -51,22 +58,6 @@ console.log("e")
             onChange={(e) => setCourseName(e.target.value)}
             className="mt-2 p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter course name"
-            required
-          />
-        </div>
-
-        {/* Thumbnail URL Input */}
-        <div className="mb-4">
-          <label htmlFor="thumbnailUrl" className="block text-sm font-medium text-gray-700">
-            Thumbnail URL
-          </label>
-          <input
-            id="thumbnailUrl"
-            type="url"
-            value={thumbnailUrl}
-            onChange={(e) => setThumbnailUrl(e.target.value)}
-            className="mt-2 p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter thumbnail URL"
             required
           />
         </div>
@@ -121,7 +112,7 @@ console.log("e")
         {/* Duration Input */}
         <div className="mb-4">
           <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
-            Duration (months)
+            Duration ({durationUnit})
           </label>
           <input
             id="duration"
@@ -129,11 +120,37 @@ console.log("e")
             value={duration}
             onChange={(e) => setDuration(e.target.value)}
             className="mt-2 p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter course duration"
+            placeholder={`Enter course duration in ${durationUnit}`}
             required
           />
         </div>
 
+        {/* Duration Unit Toggle */}
+        <div className="mb-4">
+          <span className="block text-sm font-medium text-gray-700">Duration Unit</span>
+          <div className="mt-2 flex items-center space-x-4">
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                name="durationUnit"
+                value="months"
+                checked={durationUnit === 'months'}
+                onChange={() => setDurationUnit('months')}
+              />
+              <span>Months</span>
+            </label>
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                name="durationUnit"
+                value="weeks"
+                checked={durationUnit === 'weeks'}
+                onChange={() => setDurationUnit('weeks')}
+              />
+              <span>Weeks</span>
+            </label>
+          </div>
+        </div>
 
         {/* Submit Button */}
         <div className="flex justify-center mt-6">

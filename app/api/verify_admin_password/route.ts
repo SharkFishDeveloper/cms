@@ -34,7 +34,6 @@ export async function POST(req:NextRequest){
                         }
                     },
                     instructorId:true,
-                    thumbnailUrl:true,
                     courseName:true,
                     description:true,
                     price:true,
@@ -57,7 +56,6 @@ export async function POST(req:NextRequest){
                         }
                     },
                     instructorId:true,
-                    thumbnailUrl:true,
                     courseName:true,
                     description:true,  
                     price:true,

@@ -4,7 +4,6 @@ interface CourseInterface{
         name:string
     }; 
     instructorId: string;
-    thumbnailUrl: string;
     courseName: string;
     description: string;
     price:number,
