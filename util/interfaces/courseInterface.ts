@@ -8,7 +8,7 @@ interface CourseInterface{
     description: string;
     price:number,
     startDate:string,
-    duration:true,
+    duration:string,
 }
 
 export default CourseInterface;
