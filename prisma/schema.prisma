@@ -44,8 +44,7 @@ model UserCourse {
 
 model VideoLinksArray {
   id            String     @id @default(uuid())
-  links         String[] 
-  quality       String[] 
+  links         Json?
   courseId      String   
   course        Course     @relation(fields: [courseId], references: [id]) 
 }
