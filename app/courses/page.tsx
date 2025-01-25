@@ -45,8 +45,6 @@ const Course = () => {
       toast.error("You need to be logged in to buy a course!");
       return;
     }
-
-    // Proceed with purchase logic
     toast.success(`Successfully purchased course with ID: ${courseId}`);
   };
 
@@ -54,7 +52,7 @@ const Course = () => {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
       {courses.length > 0 ? (
         courses.map((course) => {
-          const isPurchased = session?.user?.id === course.instructorId; // Check if the user matches the instructorId
+          const isPurchased = session?.user?.id === course.instructorId; 
           return (
             <div
               key={course.id}

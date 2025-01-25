@@ -49,3 +49,5 @@ model VideoLinksArray {
   courseId      String   
   course        Course     @relation(fields: [courseId], references: [id]) 
 }
+
+//quality - should be defaulted to 480,720 and 1080p

@@ -51,20 +51,16 @@ const Admin = () => {
 
   return (
     <div>
-      
       {!admin && (
         <div>
         <div>
         Admin panel
         </div>
-
       <input type="password" placeholder="Enter password" onChange={(e)=>setPassword(e.target.value)}/>
       <button onClick={handleAdminPasswordClick}>Submit</button>
       </div>
       )}
 
-
-{/* <p>All courses - {JSON.stringify(courses)}</p> */}
       { admin && (
         <>
         {admin==="admin" ? (
@@ -77,27 +73,21 @@ const Admin = () => {
           </div>
         ):(
           <div>
-
           </div>
         )}
-
         <div>
           <div onClick={()=>setCreateCourse((p)=>!p)}>
             {!createCourse ? "Create course" :"Back"}
           </div>
-
           {createCourse && session.data?.user.id && (
             <div>
               <CourseForm instructorId={session.data?.user.id} />
             </div>
-          )}
-
+          )} 
         </div>
-
         </>
       )
       }
-
     </div>
   )
 }
